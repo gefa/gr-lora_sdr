@@ -7,7 +7,7 @@ In the GNU Radio implementation of the LoRa Tx and Rx chains the user can choose
 -   On the receiver side there is the packet synchronization block, which performs all the necessary tasks needed for the synchronization, such as the necessary STO and CFO estimation and correction. The demodulation block follows, along with the Gray demapping block, the deinterleaving block, the Hamming decoder block and the dewhitening block, as well as a CRC block.
 -   The implementation can be used for fully end-to-end experimental performance results of a LoRa SDR receiver at low SNRs.
 
-This work was based on [https://github.com/rpp0/gr-lora](https://github.com/rpp0/gr-lora) by Pieter Robyns, Peter Quax, Wim Lamotte and William Thenaers. Which architecture and functionnalities have been improved to better emulate the physical layer of LoRa. 
+This work was based on [https://github.com/rpp0/gr-lora](https://github.com/rpp0/gr-lora) by Pieter Robyns, Peter Quax, Wim Lamotte and William Thenaers. Which architecture and functionnalities have been improved to better emulate the physical layer of LoRa. Port from GNU Radio 3.7 to 3.8 by [Johannes K Becker](https://github.com/jkbecker) and [Stefan Gvozdenovic](https://github.com/gefa).
 
 ## Reference
 
@@ -38,10 +38,12 @@ If you find this implementation useful for your project, please consider citing 
 - An example of an automated testing script and the corresponding grc and python file can also be found.
     
 ## Frequent errors:  
-‘ImportError: No module named lora_sdr’ under other distribution than Redhat7: -This issue comes probably from erroneous PYTHONPATH and LD_LIBRARY_PATH set in the script setpaths.sh. -The paths might need to be changed to: ~/lora_sdr/lib/python2.7/dist-packages ~/lora_sdr/lib
+‘ImportError: No module named lora_sdr’ under other distribution than Redhat7:
+- This issue comes probably from erroneous PYTHONPATH and LD_LIBRARY_PATH set in the script setpaths.sh.
+- The paths might need to be changed to: ~/lora_sdr/lib/python3.9/dist-packages ~/lora_sdr/lib
 ## Requirements:  
-    -Gnuradio 3.7  
-    -python 2  
+    -Gnuradio 3.8  
+    -python 3  
     -cmake  
     -swig  
     -libvolk  
