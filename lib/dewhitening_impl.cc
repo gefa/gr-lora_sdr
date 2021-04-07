@@ -92,13 +92,13 @@ int dewhitening_impl::general_work(int noutput_items,
 
   std::vector<tag_t> return_tag;
   get_tags_in_range(return_tag, 0, 0, nitems_read(0) + 100000);
-  if (return_tag.size() > 0) {
-    // std::cout << "DEwhit Sync Done" << std::endl;
-    add_item_tag(0, nitems_written(0), pmt::intern("status"),
-                 pmt::intern("done"));
-    consume_each(ninput_items[0]);
-    return 1;
-  }
+  // if (return_tag.size() > 0) {
+  //   // std::cout << "DEwhit Sync Done" << std::endl;
+  //   add_item_tag(0, nitems_written(0), pmt::intern("status"),
+  //                pmt::intern("done"));
+  //   consume_each(ninput_items[0]);
+  //   return 1;
+  // }
 
   uint8_t low_nib, high_nib;
   for (int i = 0; i < ninput_items[0] / 2; i++) {

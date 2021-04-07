@@ -113,12 +113,12 @@ int hamming_dec_impl::work(int noutput_items,
       s1 = codeword[1] ^ codeword[2] ^ codeword[3] ^ codeword[5];
 
       if (s0 | s1) {
-        GR_LOG_INFO(this->d_logger, "INFO: Erroneous LSB");
+        //GR_LOG_INFO(this->d_logger, "INFO: Erroneous LSB");
       }
       break;
     case 1:
       if (!(count(codeword.begin(), codeword.end(), true) % 2)) {
-        GR_LOG_INFO(this->d_logger, "INFO: Erroneous LSB");
+        //GR_LOG_INFO(this->d_logger, "INFO: Erroneous LSB");
       }
       break;
     }

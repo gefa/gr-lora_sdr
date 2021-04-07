@@ -36,7 +36,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '250000'
+    value: '125000'
   states:
     bus_sink: false
     bus_source: false
@@ -60,7 +60,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: 'False'
+    value: 'True'
   states:
     bus_sink: false
     bus_source: false
@@ -96,7 +96,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '250000'
+    value: '125000'
   states:
     bus_sink: false
     bus_source: false
@@ -126,10 +126,10 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     samp_delay: '0'
-    taps: "-0.128616616593872,\t-0.212206590789194,\t-0.180063263231421,\t3.89817183251938e-17\t\
+    taps: "[-0.128616616593872,\t-0.212206590789194,\t-0.180063263231421,\t3.89817183251938e-17\t\
       ,0.300105438719035\t,0.636619772367581\t,0.900316316157106,\t1\t,0.900316316157106,\t\
       0.636619772367581,\t0.300105438719035,\t3.89817183251938e-17,\t-0.180063263231421,\t\
-      -0.212206590789194,\t-0.128616616593872"
+      -0.212206590789194,\t-0.128616616593872]"
     type: ccf
   states:
     bus_sink: false
@@ -144,6 +144,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
+    exit: 'True'
     maxoutbuf: '0'
     minoutbuf: '0'
   states:
@@ -415,7 +416,7 @@ blocks:
     dc_offs_enb8: '""'
     dc_offs_enb9: '""'
     dev_addr: ''
-    dev_args: '"addr=192.168.10.3"'
+    dev_args: '""'
     gain0: '10'
     gain1: '31.5'
     gain10: '0'
@@ -581,7 +582,7 @@ blocks:
     norm_gain9: 'False'
     num_mboards: '1'
     otw: ''
-    rx_agc0: Default
+    rx_agc0: Enabled
     rx_agc1: Default
     rx_agc10: Default
     rx_agc11: Default

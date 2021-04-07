@@ -90,13 +90,13 @@ int header_decoder_impl::general_work(int noutput_items,
   std::vector<tag_t> return_tag;
   // std::cout << nitems_read(0) << std::endl;
   get_tags_in_range(return_tag, 0, 0, nitems_read(0) + 1000000000);
-  if (return_tag.size() > 0) {
-    // std::cout << "Header decoder Done" << std::endl;
-    add_item_tag(0, nitems_written(0), pmt::intern("status"),
-                 pmt::intern("done"));
-    consume_each(ninput_items[0]);
-    return 10;
-  }
+  // if (return_tag.size() > 0) {
+  //   // std::cout << "Header decoder Done" << std::endl;
+  //   add_item_tag(0, nitems_written(0), pmt::intern("status"),
+  //                pmt::intern("done"));
+  //   consume_each(ninput_items[0]);
+  //   return 10;
+  // }
 
   if (is_first) {
     if (m_impl_header) { // implicit header, all parameters should have been

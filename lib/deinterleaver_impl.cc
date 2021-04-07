@@ -88,13 +88,13 @@ int deinterleaver_impl::general_work(int noutput_items,
   // std::cout << "Deinterleaver read" << std::endl;
   // std::cout << nitems_read(0) << std::endl;
   get_tags_in_range(return_tag, 0, 0, 10000);
-  if (return_tag.size() > 0) {
-    // std::cout << "Deinterleaver Done" << std::endl;
-    add_item_tag(0, nitems_written(0), pmt::intern("status"),
-                 pmt::intern("done"));
-    consume_each(ninput_items[0]);
-    return 1;
-  }
+  // if (return_tag.size() > 0) {
+  //   // std::cout << "Deinterleaver Done" << std::endl;
+  //   add_item_tag(0, nitems_written(0), pmt::intern("status"),
+  //                pmt::intern("done"));
+  //   consume_each(ninput_items[0]);
+  //   return 1;
+  // }
   if (ninput_items[0] >= cw_len) { // wait for a full block to deinterleave
     // Create the empty matrices
     std::vector<std::vector<bool>> inter_bin(cw_len);

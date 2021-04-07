@@ -468,17 +468,18 @@ int frame_sync_impl::general_work(int noutput_items,
 
   std::vector<tag_t> return_tag;
   get_tags_in_range(return_tag, 0, 0, nitems_read(0));
-  if (return_tag.size() > 0) {
-#ifdef GRLORA_DEBUG
-    GR_LOG_DEBUG(this->d_logger, "Frame sync received a tag done");
-#endif
-    add_item_tag(0, nitems_written(0), pmt::intern("status"),
-                 pmt::intern("done"));
-    boost::this_thread::sleep(boost::posix_time::milliseconds(200));
-    // exit(EXIT_SUCCESS);
-    consume_each(ninput_items[0]);
-    return usFactor * m_samples_per_symbol;
-  } else {
+//   if (return_tag.size() > 0) {
+// #ifdef GRLORA_DEBUG
+//     GR_LOG_DEBUG(this->d_logger, "Frame sync received a tag done");
+// #endif
+//     add_item_tag(0, nitems_written(0), pmt::intern("status"),
+//                  pmt::intern("done"));
+//     boost::this_thread::sleep(boost::posix_time::milliseconds(200));
+//     // exit(EXIT_SUCCESS);
+//     consume_each(ninput_items[0]);
+//     return usFactor * m_samples_per_symbol;
+//   } else 
+    {
 
     // downsampling
     for (int ii = 0; ii < m_number_of_bins; ii++) {

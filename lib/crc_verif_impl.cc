@@ -101,20 +101,20 @@ int crc_verif_impl::general_work(int noutput_items, gr_vector_int &ninput_items,
   // get tags from stream
   get_tags_in_range(return_tag, 0, 0, nitems_read(0) + 1);
   // if we found tags
-  if (return_tag.size() > 0) {
-    GR_LOG_INFO(this->d_logger, "Got a tag 'done', quitting flowgraph..");
-    // message ctrl port we are done
-    consume_each(ninput_items[0]);
-    // exit program
-    if (m_exit == true) {
-      std::exit(EXIT_SUCCESS);
-      // set internal state to being done
-      return WORK_DONE;
-    } else {
-      return 1;
-    }
-    // return WORK_DONE;
-  }
+  // if (return_tag.size() > 0) {
+  //   GR_LOG_INFO(this->d_logger, "Got a tag 'done', quitting flowgraph..");
+  //   // message ctrl port we are done
+  //   consume_each(ninput_items[0]);
+  //   // exit program
+  //   if (m_exit == true) {
+  //     std::exit(EXIT_SUCCESS);
+  //     // set internal state to being done
+  //     return WORK_DONE;
+  //   } else {
+  //     return 1;
+  //   }
+  //   // return WORK_DONE;
+  // }
 
   for (size_t i = 0; i < ninput_items[0]; i++) {
     in_buff.push_back(in[i]);
