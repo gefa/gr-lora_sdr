@@ -61,7 +61,7 @@ class lora_RX(gr.top_block):
         self.lora_sdr_fft_demod_0 = lora_sdr.fft_demod(samp_rate, bw, sf, impl_head)
         self.lora_sdr_dewhitening_0 = lora_sdr.dewhitening()
         self.lora_sdr_deinterleaver_0 = lora_sdr.deinterleaver(sf)
-        self.lora_sdr_crc_verif_0 = lora_sdr.crc_verif()
+        self.lora_sdr_crc_verif_0 = lora_sdr.crc_verif(True)
         self.interp_fir_filter_xxx_0 = filter.interp_fir_filter_ccf(4, [-0.128616616593872,	-0.212206590789194,	-0.180063263231421,	3.89817183251938e-17	,0.300105438719035	,0.636619772367581	,0.900316316157106,	1	,0.900316316157106,	0.636619772367581,	0.300105438719035,	3.89817183251938e-17,	-0.180063263231421,	-0.212206590789194,	-0.128616616593872])
         self.interp_fir_filter_xxx_0.declare_sample_delay(0)
 
