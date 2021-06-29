@@ -46,13 +46,13 @@ void crc_verif_impl::forecast(int noutput_items,
 }
 unsigned int crc_verif_impl::crc16(uint8_t *data, uint32_t len) {
 
-  uint16_t crc = 0x0000;
+  uint16_t crc = 0x0000;//0xFFFF;//0x1D0F;//
   for (uint i = 0; i < len; i++) {
     uint8_t newByte = data[i];
 
     for (unsigned char i = 0; i < 8; i++) {
       if (((crc & 0x8000) >> 8) ^ (newByte & 0x80)) {
-        crc = (crc << 1) ^ 0x1021;
+        crc = (crc << 1) ^ 0x1021;//0x8005;//
       } else {
         crc = (crc << 1);
       }

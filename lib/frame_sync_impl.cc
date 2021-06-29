@@ -526,6 +526,10 @@ int frame_sync_impl::general_work(int noutput_items,
       // symbols) -1 we have found the preamble
       if (symbol_cnt == (int)(n_up - 1)) {
         // preamble synchronisation is done !, set new sync state
+#ifdef GRLORA_DEBUG
+          GR_LOG_DEBUG(this->d_logger,
+                       "DEBUG:Preamble");
+#endif
         m_state = SYNC;
         // clear variables
         symbol_cnt = 0;
@@ -583,7 +587,11 @@ int frame_sync_impl::general_work(int noutput_items,
          * @brief Network identifier 1
          *
          */
-
+#ifdef GRLORA_DEBUG
+          GR_LOG_DEBUG(this->d_logger,
+                       "DEBUG:NET_ID1:" + std::to_string(bin_idx));
+#endif
+        // first time through we just received preamble
         if (bin_idx == 0 || bin_idx == 1 || bin_idx == m_number_of_bins - 1) {
           // TODO: look for additional upchirps. Won't work if
           // network identifier 1 equals 2^sf-1, 0 or 1!
@@ -598,7 +606,8 @@ int frame_sync_impl::general_work(int noutput_items,
           lambda_sto = 0;
         }
         // network identifier 1 correct or off by one
-        else {
+        else 
+        {
           net_id_off = bin_idx - net_id_1;
           // try the second network identifier
           symbol_cnt = NET_ID2;
@@ -610,6 +619,10 @@ int frame_sync_impl::general_work(int noutput_items,
          * @brief Network identifier 2
          *
          */
+#ifdef GRLORA_DEBUG
+          GR_LOG_DEBUG(this->d_logger,
+                       "DEBUG:NET_ID2:" + std::to_string(bin_idx));
+#endif
         // we got the wrong network identifier
         if (labs(bin_idx - net_id_2) > 1) {
           // start again with detecting the preamble
@@ -618,7 +631,8 @@ int frame_sync_impl::general_work(int noutput_items,
           noutput_items = 0;
           k_hat = 0;
           lambda_sto = 0;
-        } else if (net_id_off && (bin_idx - net_id_2) == net_id_off) {
+        } else 
+        if (net_id_off && (bin_idx - net_id_2) == net_id_off) {
           // correct case off by one net id
           items_to_consume -= usFactor * net_id_off;
           symbol_cnt = DOWNCHIRP1;
@@ -642,6 +656,10 @@ int frame_sync_impl::general_work(int noutput_items,
          */
         // get value of the preamble downchirp
         down_val = get_symbol_val(&symb_corr[0], &m_upchirp[0]);
+#ifdef GRLORA_DEBUG
+          GR_LOG_DEBUG(this->d_logger,
+                       "DEBUG:down_val:" + std::to_string(down_val));
+#endif
         symbol_cnt = QUARTER_DOWN;
         break;
       }
@@ -656,10 +674,10 @@ int frame_sync_impl::general_work(int noutput_items,
           // get integer part of CFO
           CFOint = floor(down_val / 2);
 // set point for new frame
-// #ifdef GRLORA_DEBUG
-//           GR_LOG_DEBUG(this->d_logger,
-//                        "DEBUG:CFOint:" + std::to_string(CFOint));
-// #endif
+#ifdef GRLORA_DEBUG
+          GR_LOG_DEBUG(this->d_logger,
+                       "DEBUG:CFOint:" + std::to_string(CFOint));
+#endif
 
           message_port_pub(pmt::intern("new_frame"), pmt::mp((long)CFOint));
         }
