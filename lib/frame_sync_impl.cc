@@ -31,8 +31,8 @@ frame_sync_impl::frame_sync_impl(float samp_rate, uint32_t bandwidth,
   m_sf = sf;
   symbols_to_skip = 4;
   n_up = 8;
-  net_id_1 = 8; // should be different from 2^sf-1, 0 and 1
-  net_id_2 = 16;
+  net_id_1 = 24;//8; // should be different from 2^sf-1, 0 and 1
+  net_id_2 = 32;//16;
   up_symb_to_use = 6;
 
   usFactor = 4;
