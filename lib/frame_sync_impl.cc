@@ -2,7 +2,7 @@
 #include <gnuradio/io_signature.h>
 // Fix for libboost > 1.75
 #include <boost/bind/placeholders.hpp>
-
+#define NET_ID_FILTER
 using namespace boost::placeholders;
 namespace gr {
 namespace lora_sdr {
@@ -428,9 +428,11 @@ void frame_sync_impl::header_crc_handler(pmt::pmt_t crc) {
  * @param err : error message
  */
 void frame_sync_impl::header_err_handler(pmt::pmt_t err) {
-  GR_LOG_INFO(this->d_logger,
-              "Error in header decoding, reverting to detecting the header" +
-                  pmt::symbol_to_string(err));
+            GR_LOG_DEBUG(this->d_logger,
+                       "DEBUG:header_err_handler");
+  // GR_LOG_INFO(this->d_logger,
+  //             "Error in header decoding, reverting to detecting the header" +
+  //                 pmt::symbol_to_string(err));
   // Set sync state to detect and start over the synchronisation
   m_state = DETECT;
   symbol_cnt = 1;
@@ -442,8 +444,10 @@ void frame_sync_impl::header_err_handler(pmt::pmt_t err) {
  * @param err : error message
  */
 void frame_sync_impl::frame_err_handler(pmt::pmt_t err) {
-  GR_LOG_INFO(this->d_logger,
-              "Error in frame decoding:" + pmt::symbol_to_string(err));
+              GR_LOG_DEBUG(this->d_logger,
+                       "DEBUG:frame_err_handler");
+  // GR_LOG_INFO(this->d_logger,
+  //             "Error in frame decoding:" + pmt::symbol_to_string(err));
 };
 
 /**
@@ -596,8 +600,10 @@ int frame_sync_impl::general_work(int noutput_items,
           // TODO: look for additional upchirps. Won't work if
           // network identifier 1 equals 2^sf-1, 0 or 1!
         }
+#ifdef NET_ID_FILTER
         // wrong network identifier
-        else if (labs(bin_idx - net_id_1) > 1) {
+        else if (labs(bin_idx - net_id_1) > 1)
+        {
           // start again with detecting the preamble
           m_state = DETECT;
           symbol_cnt = 1;
@@ -612,6 +618,9 @@ int frame_sync_impl::general_work(int noutput_items,
           // try the second network identifier
           symbol_cnt = NET_ID2;
         }
+#elif
+          symbol_cnt = NET_ID2;
+#endif
         break;
       }
       case NET_ID2: {
@@ -623,8 +632,10 @@ int frame_sync_impl::general_work(int noutput_items,
           GR_LOG_DEBUG(this->d_logger,
                        "DEBUG:NET_ID2:" + std::to_string(bin_idx));
 #endif
+#ifdef NET_ID_FILTER
         // we got the wrong network identifier
-        if (labs(bin_idx - net_id_2) > 1) {
+        if (labs(bin_idx - net_id_2) > 1) 
+        {
           // start again with detecting the preamble
           m_state = DETECT;
           symbol_cnt = 1;
@@ -636,7 +647,9 @@ int frame_sync_impl::general_work(int noutput_items,
           // correct case off by one net id
           items_to_consume -= usFactor * net_id_off;
           symbol_cnt = DOWNCHIRP1;
-        } else {
+        } else
+#endif
+        {
           symbol_cnt = DOWNCHIRP1;
         }
         break;
