@@ -6,7 +6,7 @@
 #
 # GNU Radio Python Flow Graph
 # Title: Tx Rx Simulation
-# GNU Radio version: 3.8.2.0
+# GNU Radio version: 3.8.1.0
 
 from gnuradio import blocks
 import pmt
@@ -167,11 +167,6 @@ def main(top_block_cls=tx_rx_simulation, options=None):
 
     tb.start()
 
-    try:
-        input('Press Enter to quit: ')
-    except EOFError:
-        pass
-    tb.stop()
     tb.wait()
 
 
