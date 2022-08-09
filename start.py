@@ -65,9 +65,11 @@ for trial in TRIALS:
         #  print(my_env)
           subp1 = Popen(['nohup','./apps/single_user/tx_rx_simulation.py','-e','-13','2>&1','>','res_lora_sim.txt','&'],) 
 #                        preexec_fn=demote(user_uid, user_gid),) # env=env)
-          os.system("_pid=$!")
+          # -f /proc/<pid>/fd/1
+          
           print("starting flowgraph pid {}".format(subp1.pid))
           time.sleep(100) # this is crutial !!!!! otherwise report is nothing
+          os.system('_pid=$!; cat /proc/${_pid}/fd/1 | grep -c "CRC valid"; cat /proc/${_pid}/fd/1 | grep -c "Frame";kill -9 $_pid')
           # top_block_cls=zigbee_ble_channelization
           # tb = top_block_cls()
           # tb.start()
@@ -83,10 +85,10 @@ for trial in TRIALS:
 #           #subp3 = Popen(['opreport','-l','|','grep','xlating'])
 #           os.system("opreport -l | grep xlating")
 #           os.system("opreport -l | grep xlating | awk '{print $2}' ")
-          os.system("kill -9 $!")
-          #os.system("sudo kill -9 {}".format(subp1.pid))
-          os.system('cat res_lora_sim.txt | grep -c "CRC valid"')
-          os.system('cat res_lora_sim.txt | grep -c "Frame"')
+          # os.system("kill -9 $!")
+          # #os.system("sudo kill -9 {}".format(subp1.pid))
+          # os.system('cat res_lora_sim.txt | grep -c "CRC valid"')
+          # os.system('cat res_lora_sim.txt | grep -c "Frame"')
           
 
           # tb.stop()
