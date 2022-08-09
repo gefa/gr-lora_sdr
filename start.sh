@@ -56,7 +56,7 @@ done
 function jumpto
 {
 PASS=`cat res_lora_sim.txt | grep -c "CRC valid"`
-TOTAL=`cat res_lora_sim.txt | grep -c frame`
+TOTAL=`cat res_lora_sim.txt | grep -c "Frame"`
 echo "PASS"
 echo $PASS
 echo "TOTOAL"

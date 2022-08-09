@@ -2,6 +2,11 @@
 from subprocess import Popen, PIPE
 import subprocess, pwd
 import os, time, sys
+import atexit
+
+def exit_handler(_pid):
+    os.system("kill -9 {}".format(_pid))
+
 my_env = os.environ
 my_env["PATH"] = "/usr/sbin:/sbin:" + my_env["PATH"]
 #from zigbee_ble_channelization import *
@@ -9,17 +14,18 @@ my_env["PATH"] = "/usr/sbin:/sbin:" + my_env["PATH"]
 #startup_extra_time = 9
 devices = 1
 
-# print("argv0 "+sys.argv[0])
-# print("argv1 "+sys.argv[1])
-# try:
-#     proto = str(sys.argv[1])
-# except:
-#     print("Assuming proto=zigbee")
-#     proto = 'zigbee'
+print("argv0 "+sys.argv[0])
+print("argv1 "+sys.argv[1])
+try:
+    noise = str(sys.argv[1])
+except:
+    #print("Assuming proto=zigbee")
+    noise = '-10'
 
 TRIALS =  [0] #[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]#range(0,100,1)#[0,1,2,3,4,5,6,7,8,9]#range(10,100,1)#[0,1,2,3,4,5,6,7,8,9] # range(10,100,1)#
-CH_TIMES = [1] #[0,1,2]#,0.1,3]#[1,2,3]#,2,3,4,5,6]#,2,4,8,16,32]#[0.1,1,3]
-# ZIG=False
+NOISES = [-15,-14,-13,-12] #[0,1,2]#,0.1,3]#[1,2,3]#,2,3,4,5,6]#,2,4,8,16,32]#[0.1,1,3]
+PERS = [] # ZIG=False
+TIMEOUT = 10 # roughly each second is one pakcket
 # BLE=True
 # LORA=False
 
@@ -52,7 +58,7 @@ def report_ids(msg):
 
 
 for trial in TRIALS:
-  for channel_time in CH_TIMES:
+  for nois in NOISES:
 
         # DIR = "data/"+proto
         # os.system("mkdir "+DIR)
@@ -63,17 +69,37 @@ for trial in TRIALS:
 
         # if proto == 'multi':
         #  print(my_env)
-          subp1 = Popen(['nohup','./apps/single_user/tx_rx_simulation.py','-e','-13','2>&1','>','res_lora_sim.txt','&'],) 
+          os.system("rm nohup.out")
+          subp1 = Popen(['nohup','./apps/single_user/tx_rx_simulation.py','-e',str(nois)],) 
 #                        preexec_fn=demote(user_uid, user_gid),) # env=env)
           # -f /proc/<pid>/fd/1
-          
+          atexit.register(exit_handler, subp1.pid)          
           print("starting flowgraph pid {}".format(subp1.pid))
-          time.sleep(100) # this is crutial !!!!! otherwise report is nothing
-          os.system('export _pid=$!; echo $_pid; cat /proc/${_pid}/fd/1 | grep -c "CRC valid"; cat /proc/${_pid}/fd/1 | grep -c "Frame";kill -9 $_pid')
+          time.sleep(TIMEOUT) # this is crutial !!!!! otherwise report is nothing
+          #os.system('cat nohup.out')
+#          os.system("cat /proc/{}/fd/1 | grep -c 'CRC valid'; cat /proc/{}/fd/1 | grep -c Frame".format(subp1.pid,subp1.pid))
+          #os.system("cat nohup.out | grep -c 'CRC valid'; cat nohup.out | grep -c Frame")
+          # _pass = subprocess.run("cat nohup.out | grep -c 'CRC valid';".split(' '), stdout=subprocess.PIPE)
+          # _fail = subprocess.run("cat nohup.out | grep -c 'Frame';".split(' '), stdout=subprocess.PIPE)
+          _pass=0;_total=0;_per=1;
+          with open("nohup.out", "r") as fp:
+              for line in fp:
+                if "CRC valid" in line:
+                    _pass = _pass +1
+                if "Frame" in line:
+                    _total = _total +1
+
+          print("PER="+str(_pass)+'/'+str(_total))
+          if _total!=0:
+            _per = (_total-_pass)/_total
+            print('='+str(_per))
+          PERS.append(_per)
+          os.system("kill -9 {}".format(subp1.pid))
           # top_block_cls=zigbee_ble_channelization
           # tb = top_block_cls()
           # tb.start()
-
+  print(NOISES)
+  print(PERS)
 #             #'{}'.format(devices),'{}'.format(channel_time)])
 #           # time.sleep(scan_time+5)
 #           subp2 = Popen(['sudo','operf', '--pid='+str(subp1.pid),'--callgraph']) # os.getpid()
