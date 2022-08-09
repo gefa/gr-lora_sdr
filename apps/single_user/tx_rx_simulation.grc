@@ -103,7 +103,7 @@ blocks:
     bus_structure: null
     coordinate: [1088, 28.0]
     rotation: 0
-    state: true
+    state: disabled
 - name: pay_len
   id: variable
   parameters:
@@ -187,7 +187,7 @@ blocks:
     freq_offset: 0.0/2**sf
     maxoutbuf: '0'
     minoutbuf: '0'
-    noise_voltage: noise
+    noise_voltage: '0'
     seed: '0'
     taps: 1.0 + 0.0j
   states:
@@ -213,7 +213,7 @@ blocks:
     bus_structure: null
     coordinate: [1232, 68.0]
     rotation: 0
-    state: true
+    state: disabled
 - name: import_0
   id: import
   parameters:
@@ -226,7 +226,7 @@ blocks:
     bus_structure: null
     coordinate: [1088, 84.0]
     rotation: 0
-    state: true
+    state: disabled
 - name: interp_fir_filter_xxx_0
   id: interp_fir_filter_xxx
   parameters:
