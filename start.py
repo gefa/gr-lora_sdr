@@ -69,7 +69,7 @@ for trial in TRIALS:
           
           print("starting flowgraph pid {}".format(subp1.pid))
           time.sleep(100) # this is crutial !!!!! otherwise report is nothing
-          os.system('_pid=$!; cat /proc/${_pid}/fd/1 | grep -c "CRC valid"; cat /proc/${_pid}/fd/1 | grep -c "Frame";kill -9 $_pid')
+          os.system('export _pid=$!; echo $_pid; cat /proc/${_pid}/fd/1 | grep -c "CRC valid"; cat /proc/${_pid}/fd/1 | grep -c "Frame";kill -9 $_pid')
           # top_block_cls=zigbee_ble_channelization
           # tb = top_block_cls()
           # tb.start()
