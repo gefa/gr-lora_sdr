@@ -75,6 +75,8 @@ for trial in TRIALS:
           subp1 = Popen(['nohup','./apps/single_user/tx_rx_simulation.py','-e',str(nois)],) 
 #                        preexec_fn=demote(user_uid, user_gid),) # env=env)
           # -f /proc/<pid>/fd/1
+          print("cp /proc/{}/fd/1 nohup.out".format(subp1.pid))
+          os.system("cp /proc/{}/fd/1 nohup.out".format(subp1.pid))
           atexit.register(exit_handler, subp1.pid)          
           print("starting flowgraph pid {}".format(subp1.pid))
           time.sleep(TIMEOUT) # this is crutial !!!!! otherwise report is nothing
