@@ -92,6 +92,18 @@ blocks:
     coordinate: [488, 20]
     rotation: 0
     state: enabled
+- name: noise
+  id: variable
+  parameters:
+    comment: ''
+    value: numpy.sqrt((10.0**(-esno/10.0))/2.0)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1088, 28.0]
+    rotation: 0
+    state: true
 - name: pay_len
   id: variable
   parameters:
@@ -175,7 +187,7 @@ blocks:
     freq_offset: 0.0/2**sf
     maxoutbuf: '0'
     minoutbuf: '0'
-    noise_voltage: '0.0'
+    noise_voltage: noise
     seed: '0'
     taps: 1.0 + 0.0j
   states:
@@ -185,6 +197,36 @@ blocks:
     coordinate: [1212.0, 248]
     rotation: 270
     state: enabled
+- name: esno
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: esno
+    short_id: e
+    type: intx
+    value: '-13'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1232, 68.0]
+    rotation: 0
+    state: true
+- name: import_0
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: import numpy
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1088, 84.0]
+    rotation: 0
+    state: true
 - name: interp_fir_filter_xxx_0
   id: interp_fir_filter_xxx
   parameters:

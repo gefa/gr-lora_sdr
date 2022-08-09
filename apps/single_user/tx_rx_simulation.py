@@ -6,7 +6,7 @@
 #
 # GNU Radio Python Flow Graph
 # Title: Tx Rx Simulation
-# GNU Radio version: 3.8.1.0
+# GNU Radio version: 3.8.3.0
 
 from gnuradio import blocks
 import pmt
@@ -20,12 +20,18 @@ from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
 import lora_sdr
+import numpy
 
 
 class tx_rx_simulation(gr.top_block):
 
-    def __init__(self):
+    def __init__(self, esno=-13):
         gr.top_block.__init__(self, "Tx Rx Simulation")
+
+        ##################################################
+        # Parameters
+        ##################################################
+        self.esno = esno
 
         ##################################################
         # Variables
@@ -34,6 +40,7 @@ class tx_rx_simulation(gr.top_block):
         self.sf = sf = 7
         self.samp_rate = samp_rate = bw
         self.pay_len = pay_len = 255
+        self.noise = noise = numpy.sqrt((10.0**(-esno/10.0))/2.0)
         self.impl_head = impl_head = False
         self.has_crc = has_crc = True
         self.frame_period = frame_period = 2000
@@ -62,7 +69,7 @@ class tx_rx_simulation(gr.top_block):
         self.interp_fir_filter_xxx_0.declare_sample_delay(0)
         self.interp_fir_filter_xxx_0.set_min_output_buffer(20000)
         self.channels_channel_model_0 = channels.channel_model(
-            noise_voltage=0.0,
+            noise_voltage=noise,
             frequency_offset=0.0/2**sf,
             epsilon=1.0,
             taps=[1.0 + 0.0j],
@@ -70,7 +77,6 @@ class tx_rx_simulation(gr.top_block):
             block_tags=True)
         self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, samp_rate*10,True)
         self.blocks_message_strobe_0_0 = blocks.message_strobe(pmt.intern("Hello world"), frame_period)
-
 
 
         ##################################################
@@ -96,6 +102,13 @@ class tx_rx_simulation(gr.top_block):
         self.connect((self.lora_sdr_modulate_0, 0), (self.blocks_throttle_0, 0))
         self.connect((self.lora_sdr_whitening_0, 0), (self.lora_sdr_header_0, 0))
 
+
+    def get_esno(self):
+        return self.esno
+
+    def set_esno(self, esno):
+        self.esno = esno
+        self.set_noise(numpy.sqrt((10.0**(-self.esno/10.0))/2.0))
 
     def get_bw(self):
         return self.bw
@@ -123,6 +136,13 @@ class tx_rx_simulation(gr.top_block):
 
     def set_pay_len(self, pay_len):
         self.pay_len = pay_len
+
+    def get_noise(self):
+        return self.noise
+
+    def set_noise(self, noise):
+        self.noise = noise
+        self.channels_channel_model_0.set_noise_voltage(self.noise)
 
     def get_impl_head(self):
         return self.impl_head
@@ -152,9 +172,18 @@ class tx_rx_simulation(gr.top_block):
 
 
 
+def argument_parser():
+    parser = ArgumentParser()
+    parser.add_argument(
+        "-e", "--esno", dest="esno", type=intx, default=-13,
+        help="Set esno [default=%(default)r]")
+    return parser
+
 
 def main(top_block_cls=tx_rx_simulation, options=None):
-    tb = top_block_cls()
+    if options is None:
+        options = argument_parser().parse_args()
+    tb = top_block_cls(esno=options.esno)
 
     def sig_handler(sig=None, frame=None):
         tb.stop()

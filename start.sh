@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Start.sh"
-timeout=20
+timeout=200
 sleep_for=1
 
 #REPO=gr-lora_sdr/
@@ -30,9 +30,9 @@ echo "PASS"
 echo $PASS
 echo "TOTOAL"
 echo $TOTAL
-PER=`echo 1-$PASS/$TOTAL | genius`
-echo "PER"
-echo $PER
+#PER=`echo 1-$PASS/$TOTAL | genius`
+#echo "PER"
+#echo $PER
 kill -9 $_pid
 }
 
