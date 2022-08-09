@@ -15,13 +15,15 @@ my_env["PATH"] = "/usr/sbin:/sbin:" + my_env["PATH"]
 devices = 1
 
 print("argv0 "+sys.argv[0])
-print("argv1 "+sys.argv[1])
 try:
-    noise = str(sys.argv[1])
-except:
-    #print("Assuming proto=zigbee")
-    noise = '-10'
-
+    print("argv1 "+sys.argv[1])
+    try:
+        noise = str(sys.argv[1])
+    except:
+        #print("Assuming proto=zigbee")
+        noise = '-10'
+except "IndexError":
+    pass # argument not supplied
 TRIALS =  [0] #[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]#range(0,100,1)#[0,1,2,3,4,5,6,7,8,9]#range(10,100,1)#[0,1,2,3,4,5,6,7,8,9] # range(10,100,1)#
 NOISES = [-15,-14,-13,-12] #[0,1,2]#,0.1,3]#[1,2,3]#,2,3,4,5,6]#,2,4,8,16,32]#[0.1,1,3]
 PERS = [] # ZIG=False
