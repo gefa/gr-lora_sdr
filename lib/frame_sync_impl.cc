@@ -1,7 +1,7 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
+#define USE_SYNC_WORD
 #include <gnuradio/io_signature.h>
 #include "frame_sync_impl.h"
 
@@ -391,6 +391,7 @@ namespace gr {
                         
                         if(bin_idx==0||bin_idx==1||bin_idx==m_number_of_bins-1){// look for additional upchirps. Won't work if network identifier 1 equals 2^sf-1, 0 or 1!
                         }
+#ifdef USE_SYNC_WORD
                         else if (abs(bin_idx-(int32_t)m_sync_words[0])>1){ //wrong network identifier
 
                             m_state = DETECT;
@@ -403,9 +404,15 @@ namespace gr {
                             net_id_off=bin_idx-(int32_t)m_sync_words[0];
                             symbol_cnt = NET_ID2;
                         }
+#else
+                        else{
+                            symbol_cnt = NET_ID2;
+                        }
+#endif
                         break;
                     }
                     case NET_ID2:{                        
+#ifdef USE_SYNC_WORD
                         if (abs(bin_idx-(int32_t)m_sync_words[1])>1){ //wrong network identifier
 
                             m_state = DETECT;
@@ -428,6 +435,13 @@ namespace gr {
                             #endif
                             symbol_cnt = DOWNCHIRP1;
                         }
+#else
+                        if(bin_idx==0||bin_idx==1||bin_idx==m_number_of_bins-1){
+                            m_state = DETECT;
+                        } else{
+                            m_state = DOWNCHIRP2;
+                        }
+#endif
                         break;
                     }
                     case DOWNCHIRP1:
