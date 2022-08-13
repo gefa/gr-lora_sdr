@@ -44,12 +44,15 @@ for trial in TRIALS:
           subp1 = Popen(['./apps/single_user/tx_rx_simulation.py','-e',str(nois)],) 
 #                        preexec_fn=demote(user_uid, user_gid),) # env=env)
           # -f /proc/<pid>/fd/1
-          print("cp /proc/{}/fd/1 nohup.out".format(subp1.pid))
+          time.sleep(TIMEOUT) # this is crutial !!!!! otherwise report is nothing
+          #print("cp /proc/{}/fd/1 nohup.out".format(subp1.pid))
           os.system("cp /proc/{}/fd/1 nohup.out".format(subp1.pid))
           os.system("mv nohup.out nohup"+str(nois)+".out")
           atexit.register(exit_handler, subp1.pid)
-          print("starting flowgraph pid {}".format(subp1.pid))
-          _now = time.time() + TIMEOUT  #time.sleep(TIMEOUT) # this is crutial !!!!! otherwise report is nothing
+          os.system("kill -9 {}".format(subp1.pid))
+          #print("starting flowgraph pid {}".format(subp1.pid))
+#          _now = time.time() + TIMEOUT  #
+          # time.sleep(TIMEOUT) # this is crutial !!!!! otherwise report is nothing
           #os.system('cat nohup.out')
 #          os.system("cat /proc/{}/fd/1 | grep -c 'CRC valid'; cat /proc/{}/fd/1 | grep -c Frame".format(subp1.pid,subp1.pid))
           #os.system("cat nohup.out | grep -c 'CRC valid'; cat nohup.out | grep -c Frame")
@@ -57,7 +60,7 @@ for trial in TRIALS:
           # _fail = subprocess.run("cat nohup.out | grep -c 'Frame';".split(' '), stdout=subprocess.PIPE)
           _pass=0;_total=0;_per=1;
           #with open("nohup.out", "r") as fp:
-          with io.open("nohup.out", "r", encoding="utf-8",errors="surrogateescape") as fp:
+          with io.open("nohup"+str(nois)+".out", "r", encoding="utf-8",errors="surrogateescape") as fp:
               for i,line in enumerate(fp):
                 errors = detect_decoding_errors_line(line)
                 if errors:
@@ -70,16 +73,16 @@ for trial in TRIALS:
                     _pass = _pass +1
                 if "Frame" in line:
                     _total = _total +1
-                time.sleep(1)
-                if (time.time() >= _now):
-                    break
+#                time.sleep(1)
+#                if (time.time() >= _now):
+#                    break
 
           print("PER="+str(_pass)+'/'+str(_total))
           if _total!=0:
             _per = (_total-_pass)/_total
             print('='+str(_per))
           PERS.append(_per)
-          os.system("kill -9 {}".format(subp1.pid))
+          #os.system("kill -9 {}".format(subp1.pid))
           # top_block_cls=zigbee_ble_channelization
           # tb = top_block_cls()
           # tb.start()
