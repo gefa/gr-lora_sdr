@@ -25,7 +25,7 @@ import numpy
 
 class tx_rx_simulation(gr.top_block):
 
-    def __init__(self, esno=-13):
+    def __init__(self, esno=-10):
         gr.top_block.__init__(self, "Tx Rx Simulation")
 
         ##################################################
@@ -182,7 +182,7 @@ class tx_rx_simulation(gr.top_block):
 def argument_parser():
     parser = ArgumentParser()
     parser.add_argument(
-        "-e", "--esno", dest="esno", type=intx, default=-13,
+        "-e", "--esno", dest="esno", type=intx, default=-10,
         help="Set esno [default=%(default)r]")
     return parser
 
