@@ -40,15 +40,16 @@ for trial in TRIALS:
 
         # if proto == 'multi':
         #  print(my_env)
-          os.system("mv nohup.out nohup"+str(nois)+".out")
+          #os.system("mv nohup.out nohup"+str(nois)+".out")
           subp1 = Popen(['./apps/single_user/tx_rx_simulation.py','-e',str(nois)],) 
 #                        preexec_fn=demote(user_uid, user_gid),) # env=env)
           # -f /proc/<pid>/fd/1
           print("cp /proc/{}/fd/1 nohup.out".format(subp1.pid))
           os.system("cp /proc/{}/fd/1 nohup.out".format(subp1.pid))
+          os.system("mv nohup.out nohup"+str(nois)+".out")
           atexit.register(exit_handler, subp1.pid)
           print("starting flowgraph pid {}".format(subp1.pid))
-          time.sleep(TIMEOUT) # this is crutial !!!!! otherwise report is nothing
+          _now = time.time() + TIMEOUT  #time.sleep(TIMEOUT) # this is crutial !!!!! otherwise report is nothing
           #os.system('cat nohup.out')
 #          os.system("cat /proc/{}/fd/1 | grep -c 'CRC valid'; cat /proc/{}/fd/1 | grep -c Frame".format(subp1.pid,subp1.pid))
           #os.system("cat nohup.out | grep -c 'CRC valid'; cat nohup.out | grep -c Frame")
@@ -69,6 +70,9 @@ for trial in TRIALS:
                     _pass = _pass +1
                 if "Frame" in line:
                     _total = _total +1
+                time.sleep(1)
+                if (time.time() >= _now):
+                    break
 
           print("PER="+str(_pass)+'/'+str(_total))
           if _total!=0:
