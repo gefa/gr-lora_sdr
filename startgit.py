@@ -40,7 +40,7 @@ for trial in TRIALS:
 
         # if proto == 'multi':
         #  print(my_env)
-          os.system("mv nohup.out nohup"+str(nois)+".out")
+          #os.system("mv nohup.out nohup"+str(nois)+".out")
           subp1 = Popen(['./apps/single_user/tx_rx_simulation.py','-e',str(nois)],) 
 #                        preexec_fn=demote(user_uid, user_gid),) # env=env)
           # -f /proc/<pid>/fd/1
